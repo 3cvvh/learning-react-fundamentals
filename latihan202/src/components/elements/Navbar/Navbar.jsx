@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 const Navbar = ({username}) => {
 //   const user = { username } // nanti ganti dari state/context
 // console.log(username)
@@ -13,14 +15,14 @@ const Navbar = ({username}) => {
       {/* Menu */}
       <ul className="flex items-center gap-8 list-none">
         <li>
-          <a href="/product" className="text-[#9b87c4] hover:text-[#c49dff] text-sm tracking-widest uppercase transition-colors">
+          <Link to="/product" className="text-[#9b87c4] hover:text-[#c49dff] text-sm tracking-widest uppercase transition-colors">
             Product
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/about" className="text-[#9b87c4] hover:text-[#c49dff] text-sm tracking-widest uppercase transition-colors">
-            About
-          </a>
+          <Link to={"/cart"} className="text-[#9b87c4] hover:text-[#c49dff] text-sm tracking-widest uppercase transition-colors">
+            Cart
+          </Link>
         </li>
       </ul>
 

@@ -1,4 +1,4 @@
-export default function Card({title,price,children,category}){
+export default function Card({title,price,children,category,handle,id}){
     return (
         <div className="w-64 bg-[#12082480] border border-[#82460380] rounded overflow-hidden">
 
@@ -27,7 +27,7 @@ export default function Card({title,price,children,category}){
                 {"$ "}
                 {price.toLocaleString("en-US")}
               </div>
-              <button className="bg-[#50148c80] border border-[#a050ff66] text-[#c49dff] px-4 py-1.5 text-[10px] tracking-wider rounded-sm cursor-pointer">
+              <button type="submit" onClick={() => handle(id)} className="bg-[#50148c80] border border-[#a050ff66] text-[#c49dff] px-4 py-1.5 text-[10px] tracking-wider rounded-sm cursor-pointer">
                 + Keranjang
               </button>
             </div>

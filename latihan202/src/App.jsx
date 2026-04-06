@@ -3,6 +3,7 @@ import HomePage from "./pages/home";
 import LoginPage from "./pages/loginPage";
 import Product from "./pages/product";
 import  ProtectedRoute  from "./hooks/protectedRoute";
+import CartPage from "./pages/CartPage";
 
 const App = () => {
   return (
@@ -10,11 +11,8 @@ const App = () => {
     <Routes>
       <Route index element={<HomePage />} />
       <Route path="/login" element={<LoginPage />}/>
-      <Route element={<ProtectedRoute >
       <Route path="/product" element={<Product />} />
-      </ProtectedRoute>}>
-      </Route>
-      <Route path="/product" element={<Product />} />
+      <Route path="/cart" element={<CartPage />} />
     </Routes>
     </BrowserRouter>
   )
