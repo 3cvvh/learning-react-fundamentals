@@ -8,6 +8,7 @@ export const useFetch = (url) => {
             setLoading(true)
             try{
                 const {data} = await api.get(url)
+                console.log("dariUseFetch:",data)
                 setData(data)
             }catch(error){
                 setErr(error)

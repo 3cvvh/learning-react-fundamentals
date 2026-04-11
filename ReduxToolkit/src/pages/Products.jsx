@@ -1,20 +1,38 @@
 import useFetch from "../service/fetchApi"
 import ProductCard from "../components/fragments/ProductCard";
-import { Decode } from "../service/jwtDecode";
 import Navbar from "../components/fragments/Navbar";
 import { useLogin } from "../hooks/useLogin";
+import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+// import store from "../redux/store";
 export default function Products(){
-// const {username} = Decode()
-// if(username == null){
-//   window.location.href = "/login"
-// }
-const {data,error,loading} = useFetch("https://www.omdbapi.com/?apikey=9d0ed2de&s=frieren")
+const {data,error,loading} = useFetch("https://dummyjson.com/products")
+const cartSelector = useSelector((state) => state.cart.data )
+const [totals,setTotal] = useState(0)
+// const totalRef = useRef(null)
+const [show,setShow] = useState(false)
+// const [cart,setCart] = useState([])
+// console.log(cartSelector)
+const product = data?.products || []
+useEffect(() => {
+if(cartSelector.length > 0){
+  console.log(cartSelector)
+const total = cartSelector.reduce((acc,curr) => {
+  const p = product.find(item => item.id == curr.id) || 0
+  setShow(true)
+  return acc + p.price * curr.qty
+},0)
+setTotal(total)
+localStorage.setItem("cart",JSON.stringify(cartSelector))
+// console.log(totalRef.current)
+}
+},[cartSelector,product])
+// console.log(cartSelector)
 const {username} = useLogin()
-// console.log(user)
-console.log(data)
 if(loading) return "loadingg"
 if(error) return "error jir"
-
+console.log(product)
+// console.log(product)
 return (
   <>
   <div className="min-h-screen bg-slate-100">
@@ -25,13 +43,20 @@ return (
         {/* product grid */}
          <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
 
-       {data && data.Search ? data.Search.map(produk => (
-         <ProductCard key={produk.imdbID}  title={produk.Title} poster={produk.Poster} type={produk.Type} imdbId={produk.imdbID} />
-        )): "data tidak ditemukan"}
+       {product.length > 0 ? 
+       product.map(item => {
+        const {id,title,price,category,images} = item
+        return(
+          <ProductCard key={id} poster={images[0]} title={title} price={price} id={id} category={category} />
+        )
+       })
+       :
+       <><h1>data kosong</h1></>
+       }
 
         </section>
         {/* cart section */}
-        {/* <aside className="rounded-xl bg-white p-6 shadow-md">
+        <aside className="rounded-xl bg-white p-6 shadow-md">
           <h3 className="text-3xl font-bold text-blue-600">Cart</h3>
           <div className="mt-4 text-sm text-slate-600">
             <div className="grid grid-cols-4 gap-1 border-b pb-2 font-semibold">
@@ -40,20 +65,27 @@ return (
               <span>Qty</span>
               <span>Total</span>
             </div>
-            {cart.map(c => (
-              <div key={c.id} className="grid grid-cols-4 gap-1 border-b py-2">
-                <span>{c.name}</span>
-                <span>{formatRp(c.price)}</span>
-                <span>{c.qty}</span>
-                <span>{"Rp "+ c.total.toLocaleString("id-ID",{minimumFractionDigits:0})}</span>
+          {cartSelector.length > 0 ?
+          cartSelector.map(i => {
+            const {id,title,price} =  product.find( item => item.id == i.id) || {}
+
+            return (
+                <div key={id} className="grid grid-cols-4 gap-1 border-b py-2">
+                <span>{title}</span>
+                <span>{price}</span>
+                <span>{i.qty}</span>
+                 <span>{"$ " + (price*i.qty).toLocaleString("en-US",{minimumFractionDigits:0})}</span> 
               </div>
-            ))}
+            )
+          })
+           :
+           <h1>data tida ada</h1>
+           }
           </div>
-          <div ref={totalRef} className="mt-4 border-t pt-3 text-right">
-            <p className="text-lg font-bold">Total: {total.toLocaleString("id-ID",{minimumFractionDigits:0})} </p>
-            <Counter></Counter>
+          <div style={{ "display":show ? "block" : "none" }} className="mt-4 border-t pt-3 text-right">
+            <p className="text-lg font-bold">Total: {totals.toLocaleString("id-ID",{minimumFractionDigits:0})} </p>
           </div>
-        </aside> */}
+        </aside>
       </main>
     </div>
   </>

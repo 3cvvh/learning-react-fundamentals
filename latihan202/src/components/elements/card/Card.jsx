@@ -1,4 +1,7 @@
-export default function Card({title,price,children,category,handle,id}){
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../../redux/slices/cartSlice";
+export default function Card({title,price,children,category,id}){
+  const dispatch = useDispatch()
     return (
         <div className="w-64 bg-[#12082480] border border-[#82460380] rounded overflow-hidden">
 
@@ -27,7 +30,7 @@ export default function Card({title,price,children,category,handle,id}){
                 {"$ "}
                 {price.toLocaleString("en-US")}
               </div>
-              <button type="submit" onClick={() => handle(id)} className="bg-[#50148c80] border border-[#a050ff66] text-[#c49dff] px-4 py-1.5 text-[10px] tracking-wider rounded-sm cursor-pointer">
+              <button type="submit" onClick={() => dispatch(addToCart({id,qty:1})) } className="bg-[#50148c80] border border-[#a050ff66] text-[#c49dff] px-4 py-1.5 text-[10px] tracking-wider rounded-sm cursor-pointer">
                 + Keranjang
               </button>
             </div>
